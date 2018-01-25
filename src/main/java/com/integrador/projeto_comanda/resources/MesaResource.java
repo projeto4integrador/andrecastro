@@ -18,50 +18,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.integrador.projeto_comanda.domain.Categoria;
+import com.integrador.projeto_comanda.domain.Mesa;
 import com.integrador.projeto_comanda.eventos.RecursoCriadoEvent;
-import com.integrador.projeto_comanda.repositories.CategoriaRepository;
-import com.integrador.projeto_comanda.services.CategoriaService;
+import com.integrador.projeto_comanda.repositories.MesaRepository;
 
 @RestController
-@RequestMapping("/categoria")
-public class CategoriaResource {
+@RequestMapping("/mesa")
+public class MesaResource {
 	
 	@Autowired
-	private CategoriaRepository categoriaDAO;
+	private MesaRepository mesaDAO;
 	@Autowired
-	private CategoriaService service;
-	@Autowired
-	private ApplicationEventPublisher publisher;	
+	private ApplicationEventPublisher publisher;
 	
 	@PostMapping
-	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
-		Categoria categoriaSalva = categoriaDAO.save(categoria);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response,  categoriaSalva.getId()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
-	}
+	public ResponseEntity<Mesa> criar(@Valid @RequestBody Mesa mesa, HttpServletResponse response) {
+		Mesa mesaSalva = mesaDAO.save(mesa);
+		publisher.publishEvent(new RecursoCriadoEvent(this, response,  mesaSalva.getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(mesaSalva);
+		
+	}	
 	
 	@GetMapping
-	public List<Categoria> listar() {
-		return categoriaDAO.findAll();
+	public List<Mesa> listar() {
+		return mesaDAO.findAll();
 	}	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long id){
+	public ResponseEntity<Mesa> buscarPeloCodigo(@PathVariable Long id){
 		
-		Categoria categoria = service.find(id);
+		Mesa mesa = mesaDAO.findOne(id);
 		
-		if(categoria != null){
-			return ResponseEntity.ok().body(categoria);
+		if(mesa != null){
+			return ResponseEntity.ok().body(mesa);
 		}else {
-			return ResponseEntity.notFound().build(); // retorna 404
+			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long id){
-		categoriaDAO.delete(id);
-	}
-	
+		mesaDAO.delete(id);
+	}	
 }

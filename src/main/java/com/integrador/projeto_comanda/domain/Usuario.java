@@ -1,46 +1,45 @@
 package com.integrador.projeto_comanda.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+
 @Entity
-@Table(name = "web_categoria")
-public class Categoria implements Serializable {
+@Table(name = "web_usuario")
+public class Usuario  implements Serializable {
 	private static final long serialVersionUID=1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 	
 	@NotNull
-	@Column(name = "descricao")
-	private String descricao;
-
-
-	@OneToMany(mappedBy="categoria", cascade=CascadeType.ALL)
-	private List<Produto> produto;
+	private String nome;
 	
+	@NotNull
+	private String usuario;
 	
-	public Categoria() {
+	@NotNull
+	private String senha;
+	
+	public Usuario() {
+		
 	}
 
-	public Categoria(Long id, String descricao) {
+	public Usuario(Long id, String nome, String usuario, String senha) {
 		super();
 		this.id = id;
-		this.descricao = descricao;
-	}	
-	
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -49,27 +48,34 @@ public class Categoria implements Serializable {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	public List<Produto> getProduto() {
-		return produto;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public void setProduto(List<Produto> produto) {
-		this.produto = produto;
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -82,12 +88,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
+		Usuario other = (Usuario) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -95,5 +96,7 @@ public class Categoria implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
 	
 }

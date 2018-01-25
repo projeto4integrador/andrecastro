@@ -9,15 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "web_categoria")
-public class Categoria implements Serializable {
-	private static final long serialVersionUID=1L;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Entity
+@Table(name = "web_adicional")
+public class Adicional  implements Serializable {
+	private static final long serialVersionUID=1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false, nullable = false)
@@ -26,21 +30,28 @@ public class Categoria implements Serializable {
 	@NotNull
 	@Column(name = "descricao")
 	private String descricao;
+	
+	@NotNull
+	@Column(name = "valor")
+	private double valor;
 
-
-	@OneToMany(mappedBy="categoria", cascade=CascadeType.ALL)
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "web_adicional_produto", 
+           joinColumns = @JoinColumn(name = "id_adicional", referencedColumnName = "id"), 
+    inverseJoinColumns = @JoinColumn(name = "id_produto", referencedColumnName = "id"))
 	private List<Produto> produto;
+
+	public Adicional(Long id,String descricao,double valor) {
+		super();
+		this.id = id;		
+		this.descricao  = descricao;
+		this.valor = valor;
+	}
 	
-	
-	public Categoria() {
+	public Adicional() {
 	}
 
-	public Categoria(Long id, String descricao) {
-		super();
-		this.id = id;
-		this.descricao = descricao;
-	}	
-	
 	public Long getId() {
 		return id;
 	}
@@ -56,6 +67,14 @@ public class Categoria implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
+	}
 	
 	public List<Produto> getProduto() {
 		return produto;
@@ -69,7 +88,6 @@ public class Categoria implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -82,12 +100,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
+		Adicional other = (Adicional) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -95,5 +108,5 @@ public class Categoria implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }
